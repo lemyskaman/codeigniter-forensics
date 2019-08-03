@@ -1,6 +1,6 @@
 {
-    "name": "lonnieezell/codeigniter-forensics",
-    "description": "A high-powered, customizable Profiler replacement for CodeIgniter.",
+    "name": "lemyskaman/codeigniter-forensics",
+    "description": "A high-powered, customizable Profiler replacement for CodeIgniter modified by lemyskaman.",
     "license": "MIT",
     "keywords": [
         "codeigniter", "spark", "profiler", "debug"
@@ -10,12 +10,16 @@
             "name": "Lonnie Ezell",
             "email": "lonnieezell@gmail.com",
             "role": "Developer"
+        },{
+            "name": "lemys lopez",
+            "email": "lemyskaman@gmail.com",
+            "role": "Developer"
         }
     ],
-    "homepage": "http://lonnieezell.github.io/codeigniter-forensics/",
+    "homepage": "",
     "support": {
-        "issues": "http://lonnieezell.github.io/codeigniter-forensics/issues",
-        "source": "http://lonnieezell.github.io/codeigniter-forensics/"
+        "issues": "https://github.com/lemyskaman/codeigniter-forensics/issues",
+        "source": "https://github.com/lemyskaman/codeigniter-forensics/"
     },
     "type": "codeigniter-third-party",
     "require": {
