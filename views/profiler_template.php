@@ -13,6 +13,8 @@
 ?>
 
 <style type="text/css">
+	pre {color:#fff;}
+
 	#codeigniter-profiler { clear: both; background: #222; padding: 0 5px; font-family: Helvetica, sans-serif; font-size: 10px !important; line-height: 12px; position: absolute; width: auto; min-width: 74em; max-width: 90%; z-index: 1000; display: none; }
 
 	#codeigniter-profiler.bottom-right { position: fixed; bottom:0; right: 0; -webkit-border-top-left-radius: 7px; -moz-border-radius-topleft: 7px; border-top-left-radius: 7px; -webkit-box-shadow: -1px -1px 10px #999; -moz-box-shadow: -1px -1px 10px #999; box-shadow: -1px -1px 10px #999; }
@@ -403,7 +405,7 @@ window.onload = function() {
 
 						<table class="main" id="userdata_table">
 						<?php foreach ($sections['userdata'] as $key => $val) : ?>
-							<tr><td class="hilight"><?php echo $key ?></td><td><pre><?php var_dump($val) ?></pre></td></tr>
+							<tr><td class="hilight"><?php echo $key ?></td><td><pre id="dump" ><?php var_dump($val) ?></pre></td></tr>
 						<?php endforeach; ?>
 						</table>
 					<?php endif; ?>
