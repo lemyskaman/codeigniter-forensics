@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * CodeIgniter
  *
@@ -30,26 +30,27 @@
  * @author		ExpressionEngine Dev Team
  * @link		http://codeigniter.com/user_guide/general/profiling.html
  */
-class CI_Profiler extends CI_Loader {
+class CI_Profiler extends CI_Loader
+{
 
 	protected $CI;
 
 	protected $_available_sections = array(
-										'benchmarks',
-										'get',
-										'memory_usage',
-										'post',
-										'uri_string',
-										'controller_info',
-										'queries',
-										'eloquent',
-										'http_headers',
-										'config',
-										'files',
-										'console',
-										'userdata',
-										'view_data'
-										);
+		'benchmarks',
+		'get',
+		'memory_usage',
+		'post',
+		'uri_string',
+		'controller_info',
+		'queries',
+		'eloquent',
+		'http_headers',
+		'config',
+		'files',
+		'console',
+		'userdata',
+		'view_data'
+	);
 
 	protected $_sections = array();		// Stores _compile_x() results
 
@@ -59,29 +60,29 @@ class CI_Profiler extends CI_Loader {
 
 	public function __construct($config = array())
 	{
-		$this->CI =& get_instance();
+		$this->CI = &get_instance();
 		$this->CI->load->language('profiler');
+
 
 		// If the config file has a query_toggle_count,
 		// use it, but remove it from the config array.
-		if ( isset($config['query_toggle_count']) )
-		{
+		if (isset($config['query_toggle_count'])) {
 			$this->_query_toggle_count = (int) $config['query_toggle_count'];
 			unset($config['query_toggle_count']);
 		}
 
 		// default all sections to display
-		foreach ($this->_available_sections as $section)
-		{
-			if ( ! isset($config[$section]))
-			{
-				$this->_compile_{$section} = TRUE;
+		foreach ($this->_available_sections as $section) {
+			if (!isset($config[$section])) {
+				$this->_compile_{
+				$section} = TRUE;
 			}
 		}
 
 		// Make sure the Console is loaded.
-		if (!class_exists('Console'))
-		{
+		if (!class_exists('Console')) {
+
+
 			$this->CI->load->library('Console');
 		}
 
@@ -104,11 +105,10 @@ class CI_Profiler extends CI_Loader {
 	 */
 	public function set_sections($config)
 	{
-		foreach ($config as $method => $enable)
-		{
-			if (in_array($method, $this->_available_sections))
-			{
-				$this->_compile_{$method} = ($enable !== FALSE) ? TRUE : FALSE;
+		foreach ($config as $method => $enable) {
+			if (in_array($method, $this->_available_sections)) {
+				$this->_compile_{
+				$method} = ($enable !== FALSE) ? TRUE : FALSE;
 			}
 		}
 	}
@@ -130,23 +130,19 @@ class CI_Profiler extends CI_Loader {
 		$profile = array();
 		$output = array();
 
-		foreach ($this->CI->benchmark->marker as $key => $val)
-		{
+		foreach ($this->CI->benchmark->marker as $key => $val) {
 			// We match the "end" marker so that the list ends
 			// up in the order that it was defined
-			if (preg_match("/(.+?)_end/i", $key, $match))
-			{
-				if (isset($this->CI->benchmark->marker[$match[1].'_end']) AND isset($this->CI->benchmark->marker[$match[1].'_start']))
-				{
-					$profile[$match[1]] = $this->CI->benchmark->elapsed_time($match[1].'_start', $key);
+			if (preg_match("/(.+?)_end/i", $key, $match)) {
+				if (isset($this->CI->benchmark->marker[$match[1] . '_end']) and isset($this->CI->benchmark->marker[$match[1] . '_start'])) {
+					$profile[$match[1]] = $this->CI->benchmark->elapsed_time($match[1] . '_start', $key);
 				}
 			}
 		}
 
 		// Build a table containing the profile data.
 		// Note: At some point we might want to make this data available to be logged.
-		foreach ($profile as $key => $val)
-		{
+		foreach ($profile as $key => $val) {
 			$key = ucwords(str_replace(array('_', '-'), ' ', $key));
 			$output[$key] = $val;
 		}
@@ -169,20 +165,13 @@ class CI_Profiler extends CI_Loader {
 		$output = array();
 
 		// Let's determine which databases are currently connected to
-		foreach (get_object_vars($this->CI) as $name => $cobject)
-		{
-			if ($cobject)
-			{
-				if ($cobject instanceof CI_DB)
-				{
+		foreach (get_object_vars($this->CI) as $name => $cobject) {
+			if ($cobject) {
+				if ($cobject instanceof CI_DB) {
 					$dbs[$name] = $cobject;
-				}
-				elseif ($cobject instanceof CI_Model)
-				{
-					foreach (get_object_vars($cobject) as $mname => $mobject)
-					{
-						if ($mobject instanceof CI_DB)
-						{
+				} elseif ($cobject instanceof CI_Model) {
+					foreach (get_object_vars($cobject) as $mname => $mobject) {
+						if ($mobject instanceof CI_DB) {
 							$dbs[$mname] = $mobject;
 						}
 					}
@@ -190,8 +179,7 @@ class CI_Profiler extends CI_Loader {
 			}
 		}
 
-		if (count($dbs) == 0)
-		{
+		if (count($dbs) == 0) {
 			return $this->CI->lang->line('profiler_no_db'); // to get db access must be public instance
 		}
 
@@ -203,30 +191,23 @@ class CI_Profiler extends CI_Loader {
 
 
 		$total = 0; // total query time
-		foreach ($dbs as $controler => $db)
-		{
+		foreach ($dbs as $controler => $db) {
 
-			foreach ($db->queries as $key => $val)
-			{
+			foreach ($db->queries as $key => $val) {
 				$time = number_format($db->query_times[$key], 4);
 				$total += $db->query_times[$key];
 
-				foreach ($highlight as $bold)
-				{
-					$val = str_replace($bold, '<b>'. $bold .'</b>', $val);
+				foreach ($highlight as $bold) {
+					$val = str_replace($bold, '<b>' . $bold . '</b>', $val);
 				}
 
-				$output[][$time] = $controler.':'.$db->database.' ' . $val; // there's a filter CI plugin, so must show controler name, tho mention on wich controler was exec the query if some filter was applied
+				$output[][$time] = $controler . ':' . $db->database . ' ' . $val; // there's a filter CI plugin, so must show controler name, tho mention on wich controler was exec the query if some filter was applied
 			}
-
 		}
 
-		if(count($output) == 0)
-		{
+		if (count($output) == 0) {
 			$output = $this->CI->lang->line('profiler_no_queries');
-		}
-		else
-		{
+		} else {
 			$total = number_format($total, 4);
 			$output[][$total] = 'Total Query Execution Time';
 		}
@@ -248,11 +229,11 @@ class CI_Profiler extends CI_Loader {
 
 		// hack to make eloquent not throw error for now
 		// but checks if file actually exists, or CI will throw an error
-		if (file_exists(APPPATH.'/models/Eloquent/Assets/Action.php')) {
+		if (file_exists(APPPATH . '/models/Eloquent/Assets/Action.php')) {
 			$this->CI->load->model('Eloquent/Assets/Action');
 		}
 
-		if ( ! class_exists('Illuminate\Database\Capsule\Manager', FALSE)) {
+		if (!class_exists('Illuminate\Database\Capsule\Manager', FALSE)) {
 			$output = 'Illuminate\Database has not been loaded.';
 		} else {
 			// Load the text helper so we can highlight the SQL
@@ -264,24 +245,20 @@ class CI_Profiler extends CI_Loader {
 
 			$total = 0; // total query time
 			$queries = Illuminate\Database\Capsule\Manager::getQueryLog();
-			foreach ($queries as $q)
-			{
-				$time = number_format($q['time']/1000, 4);
-				$total += $q['time']/1000;
+			foreach ($queries as $q) {
+				$time = number_format($q['time'] / 1000, 4);
+				$total += $q['time'] / 1000;
 
 				$query = $this->interpolateQuery($q['query'], $q['bindings']);
 				foreach ($highlight as $bold)
-					$query = str_ireplace($bold, '<b>'.$bold.'</b>', $query);
+					$query = str_ireplace($bold, '<b>' . $bold . '</b>', $query);
 
 				$output[][$time] = $query;
 			}
 
-			if(count($output) == 0)
-			{
+			if (count($output) == 0) {
 				$output = $this->CI->lang->line('profiler_no_queries');
-			}
-			else
-			{
+			} else {
 				$total = number_format($total, 4);
 				$output[][$total] = 'Total Query Execution Time';
 			}
@@ -290,7 +267,8 @@ class CI_Profiler extends CI_Loader {
 		return $output;
 	}
 
-	public function interpolateQuery($query, array $params) {
+	public function interpolateQuery($query, array $params)
+	{
 		$keys = array();
 		$values = $params;
 
@@ -331,20 +309,13 @@ class CI_Profiler extends CI_Loader {
 
 		$get = $this->CI->input->get();
 
-		if (count($get) == 0 || $get === false)
-		{
+		if (count($get) == 0 || $get === false) {
 			$output = $this->CI->lang->line('profiler_no_get');
-		}
-		else
-		{
-			foreach ($get as $key => $val)
-			{
-				if (is_array($val))
-				{
+		} else {
+			foreach ($get as $key => $val) {
+				if (is_array($val)) {
 					$output[$key] = "<pre>" . htmlspecialchars(stripslashes(print_r($val, true))) . "</pre>";
-				}
-				else
-				{
+				} else {
 					$output[$key] = htmlspecialchars(stripslashes($val));
 				}
 			}
@@ -364,26 +335,18 @@ class CI_Profiler extends CI_Loader {
 	{
 		$output = array();
 
-		if (count($_POST) == 0)
-		{
+		if (count($_POST) == 0) {
 			$output = $this->CI->lang->line('profiler_no_post');
-		}
-		else
-		{
-			foreach ($_POST as $key => $val)
-			{
-				if ( ! is_numeric($key))
-				{
-					$key = "'".$key."'";
+		} else {
+			foreach ($_POST as $key => $val) {
+				if (!is_numeric($key)) {
+					$key = "'" . $key . "'";
 				}
 
-				if (is_array($val))
-				{
-					$output['&#36;_POST['. $key .']'] = '<pre>'. htmlspecialchars(stripslashes(print_r($val, TRUE))) . '</pre>';
-				}
-				else
-				{
-					$output['&#36;_POST['. $key .']'] = htmlspecialchars(stripslashes($val));
+				if (is_array($val)) {
+					$output['&#36;_POST[' . $key . ']'] = '<pre>' . htmlspecialchars(stripslashes(print_r($val, TRUE))) . '</pre>';
+				} else {
+					$output['&#36;_POST[' . $key . ']'] = htmlspecialchars(stripslashes($val));
 				}
 			}
 		}
@@ -400,12 +363,9 @@ class CI_Profiler extends CI_Loader {
 	 */
 	protected function _compile_uri_string()
 	{
-		if ($this->CI->uri->uri_string == '')
-		{
+		if ($this->CI->uri->uri_string == '') {
 			$output = $this->CI->lang->line('profiler_no_uri');
-		}
-		else
-		{
+		} else {
 			$output = $this->CI->uri->uri_string;
 		}
 
@@ -421,7 +381,7 @@ class CI_Profiler extends CI_Loader {
 	 */
 	protected function _compile_controller_info()
 	{
-		$output = $this->CI->router->class."/".$this->CI->router->method;
+		$output = $this->CI->router->class . "/" . $this->CI->router->method;
 
 		return $output;
 	}
@@ -437,12 +397,9 @@ class CI_Profiler extends CI_Loader {
 	 */
 	protected function _compile_memory_usage()
 	{
-		if (function_exists('memory_get_usage') && ($usage = memory_get_usage()) != '')
-		{
-			$output = number_format($usage) .' bytes';
-		}
-		else
-		{
+		if (function_exists('memory_get_usage') && ($usage = memory_get_usage()) != '') {
+			$output = number_format($usage) . ' bytes';
+		} else {
 			$output = $this->CI->lang->line('profiler_no_memory_usage');
 		}
 
@@ -462,8 +419,7 @@ class CI_Profiler extends CI_Loader {
 	{
 		$output = array();
 
-		foreach (array('HTTP_ACCEPT', 'HTTP_USER_AGENT', 'HTTP_CONNECTION', 'SERVER_PORT', 'SERVER_NAME', 'REMOTE_ADDR', 'SERVER_SOFTWARE', 'HTTP_ACCEPT_LANGUAGE', 'SCRIPT_NAME', 'REQUEST_METHOD',' HTTP_HOST', 'REMOTE_HOST', 'CONTENT_TYPE', 'SERVER_PROTOCOL', 'QUERY_STRING', 'HTTP_ACCEPT_ENCODING', 'HTTP_X_FORWARDED_FOR') as $header)
-		{
+		foreach (array('HTTP_ACCEPT', 'HTTP_USER_AGENT', 'HTTP_CONNECTION', 'SERVER_PORT', 'SERVER_NAME', 'REMOTE_ADDR', 'SERVER_SOFTWARE', 'HTTP_ACCEPT_LANGUAGE', 'SCRIPT_NAME', 'REQUEST_METHOD', ' HTTP_HOST', 'REMOTE_HOST', 'CONTENT_TYPE', 'SERVER_PROTOCOL', 'QUERY_STRING', 'HTTP_ACCEPT_ENCODING', 'HTTP_X_FORWARDED_FOR') as $header) {
 			$val = (isset($_SERVER[$header])) ? $_SERVER[$header] : '';
 			$output[$header] =  $val;
 		}
@@ -484,10 +440,8 @@ class CI_Profiler extends CI_Loader {
 	{
 		$output = array();
 
-		foreach ($this->CI->config->config as $config=>$val)
-		{
-			if (is_array($val))
-			{
+		foreach ($this->CI->config->config as $config => $val) {
+			if (is_array($val)) {
 				$val = print_r($val, TRUE);
 			}
 
@@ -514,16 +468,11 @@ class CI_Profiler extends CI_Loader {
 	{
 		$logs = Console::get_logs();
 
-		if ($logs['console'])
-		{
-			foreach ($logs['console'] as $key => $log)
-			{
-				if ($log['type'] == 'log')
-				{
+		if ($logs['console']) {
+			foreach ($logs['console'] as $key => $log) {
+				if ($log['type'] == 'log') {
 					$logs['console'][$key]['data'] = print_r($log['data'], true);
-				}
-				elseif ($log['type'] == 'memory')
-				{
+				} elseif ($log['type'] == 'memory') {
 					$logs['console'][$key]['data'] = $this->get_file_size($log['data']);
 				}
 			}
@@ -538,29 +487,22 @@ class CI_Profiler extends CI_Loader {
 	{
 		$output = array();
 
-		if (FALSE !== $this->CI->load->is_loaded('session'))
-		{
+		if (FALSE !== $this->CI->load->is_loaded('session')) {
 
 			$compiled_userdata = $this->CI->session->all_userdata();
 
-			if (count($compiled_userdata))
-			{
-				foreach ($compiled_userdata as $key => $val)
-				{
-					if (is_numeric($key))
-					{
-						$output[$key] = print_r($val,true);
+			if (count($compiled_userdata)) {
+				foreach ($compiled_userdata as $key => $val) {
+					if (is_numeric($key)) {
+						$output[$key] = print_r($val, true);
 					}
 
-					if (is_array($val) || is_object($val))
-					{
+					if (is_array($val) || is_object($val)) {
 						if (is_object($val))
 							$output[$key] = json_decode(json_encode($val), true);
 						else
 							$output[$key] = htmlspecialchars(stripslashes(print_r($val, true)));
-					}
-					else
-					{
+					} else {
 						$output[$key] = htmlspecialchars(stripslashes(print_r($val, true)));
 					}
 				}
@@ -583,19 +525,14 @@ class CI_Profiler extends CI_Loader {
 	{
 		$output = array();
 
-		foreach ($this->_ci_cached_vars as $key => $val)
-		{
-			if (is_numeric($key))
-			{
+		foreach ($this->_ci_cached_vars as $key => $val) {
+			if (is_numeric($key)) {
 				$output[$key] = "'$val'";
 			}
 
-			if (is_array($val) || is_object($val))
-			{
+			if (is_array($val) || is_object($val)) {
 				$output[$key] = '<pre>' . htmlspecialchars(stripslashes(print_r($val, true))) . '</pre>';
-			}
-			else
-			{
+			} else {
 				$output[$key] = htmlspecialchars(stripslashes($val));
 			}
 		}
@@ -606,20 +543,29 @@ class CI_Profiler extends CI_Loader {
 	//--------------------------------------------------------------------
 
 
-	public static function get_file_size($size, $retstring = null) {
-        // adapted from code at http://aidanlister.com/repos/v/function.size_readable.php
-	    $sizes = array('bytes', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+	public static function get_file_size($size, $retstring = null)
+	{
+		// adapted from code at http://aidanlister.com/repos/v/function.size_readable.php
+		$sizes = array('bytes', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
 
-	    if ($retstring === null) { $retstring = '%01.2f %s'; }
+		if ($retstring === null) {
+			$retstring = '%01.2f %s';
+		}
 
 		$lastsizestring = end($sizes);
 
 		foreach ($sizes as $sizestring) {
-	       	if ($size < 1024) { break; }
-	           if ($sizestring != $lastsizestring) { $size /= 1024; }
+			if ($size < 1024) {
+				break;
+			}
+			if ($sizestring != $lastsizestring) {
+				$size /= 1024;
+			}
 		}
 
-		if ($sizestring == $sizes[0]) { $retstring = '%01d %s'; } // Bytes aren't normally fractional
+		if ($sizestring == $sizes[0]) {
+			$retstring = '%01d %s';
+		} // Bytes aren't normally fractional
 		return sprintf($retstring, $size, $sizestring);
 	}
 
@@ -636,10 +582,9 @@ class CI_Profiler extends CI_Loader {
 
 		$fields_displayed = 0;
 
-		foreach ($this->_available_sections as $section)
-		{
-			if ($this->_compile_{$section} !== FALSE)
-			{
+		foreach ($this->_available_sections as $section) {
+			if ($this->_compile_{
+			$section} !== FALSE) {
 				$func = "_compile_{$section}";
 				if ($section == 'http_headers') $section = 'headers';
 				$this->_sections[$section] = $this->{$func}();
@@ -649,7 +594,6 @@ class CI_Profiler extends CI_Loader {
 
 		return $this->CI->load->view('profiler_template', array('sections' => $this->_sections), true);
 	}
-
 }
 
 // END CI_Profiler class
