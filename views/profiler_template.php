@@ -13,7 +13,7 @@ $bar_location = 'bottom-right';
 ?>
 
 <style type="text/css">
-    #codeigniter-profiler .pre {color:#fff;}
+    #codeigniter-profiler pre {color:#fff;}
     .console-pre {color:#fff;}
 
     #codeigniter-profiler { clear: both; background: #222; padding: 0 5px; font-family: Helvetica, sans-serif; font-size: 10px !important; line-height: 12px; position: absolute; width: auto; min-width: 74em; max-width: 90%; z-index: 1000; display: none; }
